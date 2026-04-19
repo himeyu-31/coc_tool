@@ -1,0 +1,261 @@
+[
+  {
+    "id": "san",
+    "term": "SAN",
+    "shortDescription": "正気度を表す値。",
+    "detail": "恐怖や超常現象に触れたとき減少し、0に近づくほど精神的に危険な状態になります。CoC7版ではPOWを基準に初期SANを扱います。",
+    "relatedTerms": ["pow", "temporary-insanity", "indefinite-insanity"]
+  },
+  {
+    "id": "san-check",
+    "term": "SANチェック",
+    "shortDescription": "恐怖や怪異に対して正気を保てるか確認する判定。",
+    "detail": "怪異に遭遇した場面で正気度をどれだけ失うかを見る処理です。成功時と失敗時で減少量が異なることが多く、探索の緊張感を支える中心要素です。",
+    "relatedTerms": ["san", "temporary-insanity", "indefinite-insanity"]
+  },
+  {
+    "id": "occupational-points",
+    "term": "職業ポイント",
+    "shortDescription": "職業らしさを表す技能に振るポイント。",
+    "detail": "職業ごとに計算式があり、職業技能へ優先的に配分します。初心者は職業に沿った役割を作りやすくなります。",
+    "relatedTerms": ["profession", "hobby-points"]
+  },
+  {
+    "id": "hobby-points",
+    "term": "興味ポイント",
+    "shortDescription": "個人の趣味や経験を表す技能ポイント。",
+    "detail": "職業に縛られず、探索者の個性を出すために使います。職業技能を補う形で配分すると扱いやすいです。",
+    "relatedTerms": ["occupational-points", "skill"]
+  },
+  {
+    "id": "damage-bonus",
+    "term": "ダメージボーナス",
+    "shortDescription": "STRとSIZから決まる追加ダメージ。",
+    "detail": "主に近接攻撃でダメージへ加算される補正値です。CoC7版ではビルドと合わせて参照されます。",
+    "relatedTerms": ["build", "str", "siz"]
+  },
+  {
+    "id": "build",
+    "term": "ビルド",
+    "shortDescription": "体格と筋力のまとまりを示す指標。",
+    "detail": "主にSTRとSIZから決まり、組み付きや押し合い、近接戦闘の有利不利を判断する材料になります。ダメージボーナスと一緒に参照されることが多いです。",
+    "relatedTerms": ["damage-bonus", "str", "siz"]
+  },
+  {
+    "id": "luck",
+    "term": "幸運",
+    "shortDescription": "偶然が味方するかどうかを見る値。",
+    "detail": "直接の技能ではなく、その探索者がどれだけ運に恵まれているかを示します。思わぬ危機回避や、とっさの展開で参照されやすい値です。",
+    "relatedTerms": ["pushed-roll", "bonus-die", "penalty-die"]
+  },
+  {
+    "id": "bonus-die",
+    "term": "ボーナス・ダイス",
+    "shortDescription": "有利な状況で十の位を有利に選べる補正。",
+    "detail": "CoC7版では有利な条件があると十の位を複数振って有利な方を採用します。判定の雰囲気を壊さず、有利不利を直感的に反映しやすい仕組みです。",
+    "relatedTerms": ["penalty-die", "hard-success", "extreme-success"]
+  },
+  {
+    "id": "penalty-die",
+    "term": "ペナルティ・ダイス",
+    "shortDescription": "不利な状況で十の位を不利に選ぶ補正。",
+    "detail": "暗闇、悪条件、焦りなどで判定が難しくなるときに使います。十の位を複数振り、不利な結果を採用することで緊張感を強めます。",
+    "relatedTerms": ["bonus-die", "fumble", "pushed-roll"]
+  },
+  {
+    "id": "hard-success",
+    "term": "ハード成功",
+    "shortDescription": "技能値の半分以下で達成する、より強い成功。",
+    "detail": "通常成功より難しい条件を満たす成功段階です。急ぐ、精密に行う、抵抗が強い状況を処理するときの基準として使いやすいです。",
+    "relatedTerms": ["extreme-success", "pushed-roll", "opposed-roll"]
+  },
+  {
+    "id": "extreme-success",
+    "term": "イクストリーム成功",
+    "shortDescription": "技能値の5分の1以下で達成する非常に強い成功。",
+    "detail": "極めて難しい条件を通したり、決定的な優位を得たりするときに参照されます。CoC7版の成功段階を理解すると判定の読みがしやすくなります。",
+    "relatedTerms": ["hard-success", "opposed-roll", "fumble"]
+  },
+  {
+    "id": "fumble",
+    "term": "ファンブル",
+    "shortDescription": "致命的な失敗や大きな不運を表す判定結果。",
+    "detail": "単なる失敗より悪い結果で、状況悪化や危険なトラブルを招きます。初心者卓では即死級ではなく、代償や手痛い悪化として扱うと遊びやすいです。",
+    "relatedTerms": ["pushed-roll", "penalty-die", "skill"]
+  },
+  {
+    "id": "pushed-roll",
+    "term": "プッシュロール",
+    "shortDescription": "代償覚悟でもう一度挑戦する再判定。",
+    "detail": "失敗した行為に対し、追加の危険や悪化を受け入れることで再挑戦する仕組みです。成功すれば突破口になり、失敗すれば状況が大きく悪化します。",
+    "relatedTerms": ["fumble", "hard-success", "skill"]
+  },
+  {
+    "id": "opposed-roll",
+    "term": "対抗ロール",
+    "shortDescription": "互いの成功段階を比べて勝敗を決める判定。",
+    "detail": "隠れる対見つける、押さえ込む対振りほどくなど、複数者の競り合いを処理するときに使います。成功段階の比較で結果が見やすいのがCoC7版の特徴です。",
+    "relatedTerms": ["hard-success", "extreme-success", "skill"]
+  },
+  {
+    "id": "temporary-insanity",
+    "term": "一時的狂気",
+    "shortDescription": "短時間の強い精神的混乱や発作。",
+    "detail": "大きな恐怖や急激なSAN減少で起きる、その場に強く影響する狂気反応です。逃走、硬直、感情爆発など、短期的に行動が乱れる形で表れます。",
+    "relatedTerms": ["san", "san-check", "indefinite-insanity"]
+  },
+  {
+    "id": "indefinite-insanity",
+    "term": "不定の狂気",
+    "shortDescription": "しばらく残り続ける精神的な偏りや症状。",
+    "detail": "恐怖症、執着、疑心暗鬼など、セッションをまたいでロールプレイに癖が残る狂気です。行動制限よりも、考え方や優先順位の偏りとして扱うと卓になじみやすいです。",
+    "relatedTerms": ["temporary-insanity", "san", "mania", "phobia"]
+  },
+  {
+    "id": "phobia",
+    "term": "恐怖症",
+    "shortDescription": "特定の対象や状況を強く恐れる状態。",
+    "detail": "不定の狂気として表れやすい代表例で、対象そのものよりも、対象を避けようとする行動制約の方が卓では重要になります。",
+    "relatedTerms": ["indefinite-insanity", "san", "san-check"]
+  },
+  {
+    "id": "mania",
+    "term": "マニア",
+    "shortDescription": "特定の対象へ異様な執着を抱く状態。",
+    "detail": "収集、確認、保護、研究など、特定行動が最優先になる偏りです。恐怖症と並んで、不定の狂気をわかりやすく演じやすい類型です。",
+    "relatedTerms": ["indefinite-insanity", "phobia", "pushed-roll"]
+  },
+  {
+    "id": "profession",
+    "term": "職業",
+    "shortDescription": "探索者の主な経歴や社会的な役割。",
+    "detail": "職業は職業ポイントの計算や職業技能の候補に直結します。初心者はまず職業から役割をつかむと、技能配分の方向性を決めやすくなります。",
+    "relatedTerms": ["occupational-points", "credit-rating", "skill"]
+  },
+  {
+    "id": "credit-rating",
+    "term": "信用",
+    "shortDescription": "財産、社会的立場、顔の広さをまとめた尺度。",
+    "detail": "単なるお金の多さではなく、社会でどれだけ通用する人物かを示します。職業ごとに目安があり、場面によっては装備や交渉の説得力にも影響します。",
+    "relatedTerms": ["profession", "occupational-points", "social-status"]
+  },
+  {
+    "id": "social-status",
+    "term": "社会的立場",
+    "shortDescription": "その時代や社会でどんな扱いを受けるかという背景。",
+    "detail": "CoCでは技能値だけでなく、時代・階層・肩書きによってできることが変わります。信用や職業とセットで考えると、会話シーンの解像度が上がります。",
+    "relatedTerms": ["credit-rating", "profession", "persuade"]
+  },
+  {
+    "id": "skill",
+    "term": "技能",
+    "shortDescription": "探索者が何をどれくらいこなせるかを示す数値。",
+    "detail": "調査、交渉、戦闘、知識などの行為は主に技能で判定します。CoC7版では成功段階やプッシュロールと組み合わせて扱うと、技能の役割がわかりやすくなります。",
+    "relatedTerms": ["occupational-points", "hobby-points", "pushed-roll"]
+  },
+  {
+    "id": "pow",
+    "term": "POW",
+    "shortDescription": "精神力や意志の強さを表す能力値。",
+    "detail": "初期SANやMPに関わる、精神面の中心となる能力値です。超常的な抵抗や気力の持続を考えるときにも重要になります。",
+    "relatedTerms": ["san", "magic-points", "characteristics"]
+  },
+  {
+    "id": "str",
+    "term": "STR",
+    "shortDescription": "筋力を表す能力値。",
+    "detail": "持ち上げる、押し返す、近接攻撃の強さなど、肉体的な出力に関わります。SIZと合わせてビルドやダメージボーナスに影響します。",
+    "relatedTerms": ["siz", "build", "damage-bonus"]
+  },
+  {
+    "id": "siz",
+    "term": "SIZ",
+    "shortDescription": "体格や身体の大きさを表す能力値。",
+    "detail": "耐久力や体の大きさを扱う指標で、STRと合わせてビルドやダメージボーナスの算出に使います。HP計算にも関わる重要な値です。",
+    "relatedTerms": ["str", "build", "hit-points"]
+  },
+  {
+    "id": "hit-points",
+    "term": "HP",
+    "shortDescription": "肉体的な耐久力を表す値。",
+    "detail": "負傷や戦闘の危険度を管理する基本値です。0に近づくほど行動が危険になり、SANとは別に身体面の限界を表します。",
+    "relatedTerms": ["major-wound", "siz", "con"]
+  },
+  {
+    "id": "magic-points",
+    "term": "MP",
+    "shortDescription": "精神的なエネルギーや魔術的消耗を表す値。",
+    "detail": "POWに基づいて決まり、魔術や一部の特殊処理で消費されます。普段は目立たなくても、怪異に踏み込み始めると重要性が上がる値です。",
+    "relatedTerms": ["pow", "san", "magic"]
+  },
+  {
+    "id": "con",
+    "term": "CON",
+    "shortDescription": "体力や持久力を表す能力値。",
+    "detail": "毒や病気への抵抗、疲労、HP算出などに関わる能力値です。SIZと合わせて探索者の打たれ強さを考える材料になります。",
+    "relatedTerms": ["hit-points", "siz", "major-wound"]
+  },
+  {
+    "id": "major-wound",
+    "term": "重傷",
+    "shortDescription": "一撃や負傷で深刻なダメージを受けた状態。",
+    "detail": "ただHPが減るだけでなく、その後の行動や生存に強く影響する重い負傷です。戦闘の危険性を感じさせる節目として扱うと緊張感が出ます。",
+    "relatedTerms": ["hit-points", "con", "first-aid"]
+  },
+  {
+    "id": "first-aid",
+    "term": "応急手当",
+    "shortDescription": "その場の処置で負傷の悪化を防ぐ技能。",
+    "detail": "医療の代わりではありませんが、危険な場面から生きて戻るための重要技能です。戦闘がある卓では価値が高く、初心者でも役割を持ちやすいです。",
+    "relatedTerms": ["medicine", "major-wound", "hit-points"]
+  },
+  {
+    "id": "medicine",
+    "term": "医学",
+    "shortDescription": "専門的な医療知識や治療を扱う技能。",
+    "detail": "応急手当より専門的で、病気や負傷の診断・治療に強い技能です。現代寄りのシナリオほど役立つ場面が増えやすいです。",
+    "relatedTerms": ["first-aid", "biology", "pharmacy"]
+  },
+  {
+    "id": "persuade",
+    "term": "説得",
+    "shortDescription": "相手を筋道立てて納得させるための技能。",
+    "detail": "信用や立場、状況証拠と組み合わせると効果を発揮しやすい対人技能です。脅すのではなく、話を通す場面に向いています。",
+    "relatedTerms": ["credit-rating", "social-status", "charm"]
+  },
+  {
+    "id": "charm",
+    "term": "言いくるめ・魅惑系技能",
+    "shortDescription": "場の空気や話術で相手を動かす対人アプローチ。",
+    "detail": "厳密な論理より、印象や勢い、話の運びで状況を動かす場面に向きます。説得とどう使い分けるかを考えると会話シーンが整理しやすくなります。",
+    "relatedTerms": ["persuade", "psychology", "social-status"]
+  },
+  {
+    "id": "psychology",
+    "term": "心理学",
+    "shortDescription": "相手の感情や嘘、動機を読むための技能。",
+    "detail": "直接説得するより、相手が何を考えているかを探るための技能です。対人シーンで次の一手を決める補助として使いやすいです。",
+    "relatedTerms": ["persuade", "charm", "skill"]
+  },
+  {
+    "id": "characteristics",
+    "term": "能力値",
+    "shortDescription": "探索者の身体・精神の土台となる基本値。",
+    "detail": "STR、CON、POW などの値で、技能よりも根本的な資質を表します。CoC7版では導出値や判定の解釈にも影響するため、キャラの方向性を考える起点になります。",
+    "relatedTerms": ["pow", "str", "siz"]
+  },
+  {
+    "id": "magic",
+    "term": "魔術",
+    "shortDescription": "怪異へ深く踏み込むことで扱える超常的な技法。",
+    "detail": "便利な力ではありますが、代償や危険と隣り合わせです。CoCでは切り札というより、理解や接触が進んだ結果として重く扱うと雰囲気が崩れにくいです。",
+    "relatedTerms": ["magic-points", "san", "cthulhu-mythos"]
+  },
+  {
+    "id": "cthulhu-mythos",
+    "term": "クトゥルフ神話",
+    "shortDescription": "人知を超えた真実や怪異への理解を示す特殊な知識。",
+    "detail": "高いほど神話存在への理解は深まりますが、そのぶん無垢な正気は失われていきます。便利な知識である一方、世界観の怖さそのものでもあります。",
+    "relatedTerms": ["san", "magic", "san-check"]
+  }
+]

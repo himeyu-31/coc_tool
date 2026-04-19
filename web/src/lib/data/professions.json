@@ -1,0 +1,60 @@
+[
+  {
+    "id": "private-eye",
+    "name": "私立探偵",
+    "description": "調査と対人交渉に長けた探索者。",
+    "eraTags": ["modern", "classic"],
+    "occupationalPoints": 240,
+    "occupationalPointsFormula": "EDU × 4",
+    "hobbyPoints": 120,
+    "creditRating": { "min": 9, "max": 30 },
+    "recommendedCharacteristics": ["int", "edu", "dex"],
+    "recommendedFor": ["調査の中心を担いたい", "聞き込みや追跡が好き", "情報整理が得意"],
+    "beginnerNotes": [
+      "目星、聞き耳、図書館が活躍しやすく、初心者でも役割が分かりやすい職業です。",
+      "戦闘よりも調査と対人交渉に比重があります。"
+    ],
+    "occupationSkills": [
+      { "id": "talk-fast", "name": "言いくるめ", "base": 5, "max": 80, "category": "social", "description": "言葉で相手を丸め込む技能。" },
+      { "id": "listen", "name": "聞き耳", "base": 25, "max": 85, "category": "perception", "description": "小さな音や気配を察知する技能。" },
+      { "id": "photography", "name": "写真術", "base": 10, "max": 70, "category": "technical", "description": "証拠や記録を残すための撮影技能。" },
+      { "id": "psychology", "name": "心理学", "base": 5, "max": 85, "category": "social", "description": "相手の感情や嘘を見抜く技能。" },
+      { "id": "library-use", "name": "図書館", "base": 25, "max": 85, "category": "knowledge", "description": "資料を探し、必要な情報に辿り着く技能。" },
+      { "id": "spot-hidden", "name": "目星", "base": 25, "max": 90, "category": "perception", "description": "違和感や隠されたものを見つける技能。" }
+    ],
+    "optionalSkills": [
+      { "id": "handgun", "name": "拳銃", "base": 20, "max": 80, "category": "combat", "description": "拳銃で攻撃する技能。" },
+      { "id": "track", "name": "追跡", "base": 10, "max": 80, "category": "survival", "description": "足跡や痕跡を辿る技能。" },
+      { "id": "law", "name": "法律", "base": 5, "max": 70, "category": "knowledge", "description": "法制度や権利関係を理解する技能。" }
+    ]
+  },
+  {
+    "id": "doctor",
+    "name": "医師",
+    "description": "医学知識で仲間を支える専門職。",
+    "eraTags": ["modern", "classic"],
+    "occupationalPoints": 260,
+    "occupationalPointsFormula": "EDU × 4 + APP × 2",
+    "hobbyPoints": 100,
+    "creditRating": { "min": 30, "max": 80 },
+    "recommendedCharacteristics": ["edu", "int", "pow"],
+    "recommendedFor": ["回復役を担いたい", "専門知識を使いたい", "支援寄りの立ち回りが好き"],
+    "beginnerNotes": [
+      "応急手当と医学が分かりやすく、パーティ支援役として役割を持ちやすい職業です。",
+      "交渉よりも知識と支援に強みがあります。"
+    ],
+    "occupationSkills": [
+      { "id": "medicine", "name": "医学", "base": 5, "max": 90, "category": "medical", "description": "疾病や負傷の診断に関する専門技能。" },
+      { "id": "first-aid", "name": "応急手当", "base": 30, "max": 90, "category": "medical", "description": "その場の傷病を手当てする技能。" },
+      { "id": "psychology", "name": "心理学", "base": 5, "max": 80, "category": "social", "description": "相手の感情や嘘を見抜く技能。" },
+      { "id": "persuade", "name": "説得", "base": 15, "max": 75, "category": "social", "description": "筋道立てて相手を納得させる技能。" },
+      { "id": "pharmacy", "name": "薬学", "base": 1, "max": 75, "category": "medical", "description": "薬品や薬効に関する知識。" },
+      { "id": "biology", "name": "生物学", "base": 1, "max": 70, "category": "knowledge", "description": "生物や組織に関する学術知識。" }
+    ],
+    "optionalSkills": [
+      { "id": "library-use", "name": "図書館", "base": 25, "max": 80, "category": "knowledge", "description": "資料を探し、必要な情報に辿り着く技能。" },
+      { "id": "latin", "name": "ラテン語", "base": 1, "max": 60, "category": "knowledge", "description": "医学や古文書に出ることのある古典言語。" },
+      { "id": "psychoanalysis", "name": "精神分析", "base": 1, "max": 60, "category": "medical", "description": "精神状態に干渉する専門技能。" }
+    ]
+  }
+]
