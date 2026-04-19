@@ -215,7 +215,6 @@ function TopPage({ recentSheets, onOpenGm, onOpenPl, onOpenCharacterReference, o
     <section className="top-hero card">
       <div className="hero-copy">
         <div className="hero-badge">Call of Cthulhu 7th Edition</div>
-        <h2 className="hero-title">立場ごとに入口を分けて、必要な操作だけを前に出す。</h2>
         <p className="subtitle">GM は進行と管理、PL は作成と学習を主導線にし、どちらも同じキャラクターデータを使い回せる構成です。</p>
       </div>
 
@@ -269,12 +268,10 @@ function TopPage({ recentSheets, onOpenGm, onOpenPl, onOpenCharacterReference, o
         </div>
 
         <div className="info-panel">
-          <h3>友人向けに公開するなら</h3>
+          <h3>キャラクターシートの扱い</h3>
           <ul className="feature-list">
-            <li>まずは静的ホスティングで公開するのが最短です</li>
-            <li>Cloudflare Pages や GitHub Pages などに載せて URL を配布できます</li>
-            <li>データ保存は各自のブラウザ内なので、端末変更時は CSV / XLSX で移行してください</li>
-            <li>アップデート前や端末変更前はエクスポートでバックアップしておくのが安全です</li>
+            <li>データ保存は各自のブラウザのセッションです</li>
+            <li>アップデート前や端末変更前は CSV/XLSX エクスポートでバックアップしておくのが安全です</li>
           </ul>
         </div>
 
