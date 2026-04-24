@@ -8,15 +8,19 @@
    - 現在の進捗と、どこまで実装済みかを確認するための主ドキュメント
 2. issue-breakdown.md
    - 残タスクを Epic / Issue 目線で分けて見るためのドキュメント
-3. ui-flow.md
+3. enhancement-requests.md
+   - 直近の改善要望を、実装論点と優先度に分けて確認するためのドキュメント
+4. profession-formula-inventory.md
+   - 現在の職業一覧、ポイント式、技能構成を修正前提で確認するためのドキュメント
+5. ui-flow.md
    - 画面遷移や利用導線を確認したいときに使う
-4. data-model.md
+6. data-model.md
    - データ構造や責務の境界を確認したいときに使う
-5. tech-selection.md
+7. tech-selection.md
    - 技術選定の理由を振り返りたいときに使う
-6. wireframes.md
+8. wireframes.md
    - 初期レイアウト検討の履歴
-7. competitive-analysis.md
+9. competitive-analysis.md
    - 参照した競合・既存サービスの観点整理
 
 ## 現在の実装状況の要約
