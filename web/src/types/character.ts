@@ -28,6 +28,9 @@ export type Skill = {
   max: number;
   category: SkillCategory;
   description: string;
+  usageSummary?: string;
+  usageExamples?: string[];
+  beginnerHint?: string;
 };
 
 export type ProfessionCreditRating = {
@@ -35,21 +38,46 @@ export type ProfessionCreditRating = {
   max: number;
 };
 
+export type ProfessionPointTerm = {
+  key: CharacteristicKey;
+  multiplier: number;
+};
+
+export type ProfessionPointOption = {
+  formula: string;
+  terms: ProfessionPointTerm[];
+};
+
+export type ProfessionSkillChoiceGroup = {
+  id: string;
+  label: string;
+  choose: number;
+  skillIds?: string[];
+  allowAny?: boolean;
+  suggestedSkillIds?: string[];
+};
+
 export type Profession = {
   id: string;
   name: string;
   description: string;
   eraTags: string[];
-  occupationalPoints: number;
   occupationalPointsFormula: string;
-  hobbyPoints: number;
+  occupationalPointTerms: ProfessionPointTerm[];
+  occupationalPointOptions?: ProfessionPointOption[];
+  hobbyPointsFormula: string;
   creditRating: ProfessionCreditRating;
   recommendedCharacteristics: CharacteristicKey[];
   recommendedFor: string[];
   beginnerNotes: string[];
+  skillChoiceNotes?: string[];
+  fixedOccupationSkillIds?: string[];
+  occupationSkillChoiceGroups?: ProfessionSkillChoiceGroup[];
   occupationSkills: Skill[];
   optionalSkills: Skill[];
 };
+
+export type ProfessionMode = "preset" | "custom";
 
 export type BasicInfo = {
   characterName: string;
@@ -57,7 +85,24 @@ export type BasicInfo = {
   age: string;
   gender: string;
   professionId: string;
+  professionMode: ProfessionMode;
+  professionName: string;
   era: string;
+};
+
+export type CharacterBackstory = {
+  appearance: string;
+  traits: string;
+  ideology: string;
+  injuries: string;
+  significantPeople: string;
+  phobiasAndManias: string;
+  meaningfulLocations: string;
+  tomesAndArtifacts: string;
+  treasuredPossessions: string;
+  strangeEncounters: string;
+  equipmentAndItems: string;
+  incomeAndAssets: string;
 };
 
 export type Characteristics = Record<CharacteristicKey, number>;
@@ -122,8 +167,10 @@ export type CharacterCondition = {
 export type CharacterSheet = {
   id: string;
   basicInfo: BasicInfo;
+  backstory: CharacterBackstory;
   characteristics: Characteristics;
   derivedStats: DerivedStats;
+  occupationSkillSelections?: Record<string, string[]>;
   occupationSkills: AssignedSkill[];
   optionalSkills: AssignedSkill[];
   weapons: Weapon[];

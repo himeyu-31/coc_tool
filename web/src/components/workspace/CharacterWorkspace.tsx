@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CharacterManager } from "@/components/manager/CharacterManager";
-import { CharacterReferencePanel } from "@/components/reference/CharacterReferencePanel";
+import { CharacterArchivePanel } from "@/components/archive/CharacterArchivePanel";
 import { QuickReferencePanel } from "@/components/reference/QuickReferencePanel";
 import { SessionManager } from "@/components/session/SessionManager";
 import { CharacterWizard } from "@/components/wizard/CharacterWizard";
 import { getCharacterSheets } from "@/lib/character-storage";
-import { getProfessionById } from "@/lib/professions";
+import { getDisplayedProfessionName } from "@/lib/professions";
 import { CharacterSheet } from "@/types/character";
 
-type ViewMode = "top" | "gm-home" | "pl-home" | "create" | "manage" | "character-reference" | "quick-reference" | "guide" | "session";
+type ViewMode = "top" | "create" | "character-archive" | "quick-reference" | "guide" | "session" | "table-adjustment";
 type ThemeMode = "light" | "dark";
 
 const THEME_STORAGE_KEY = "coc7-theme";
@@ -81,9 +80,9 @@ export function CharacterWorkspace() {
     navigateTo("create");
   }
 
-  function openManage() {
+  function openCharacterArchive() {
     refreshSheets();
-    navigateTo("manage");
+    navigateTo("character-archive");
   }
 
   function onBack() {
@@ -106,7 +105,6 @@ export function CharacterWorkspace() {
         <div className="workspace-nav">
           <div>
             <h1 className="title">CoC7 キャラクターシートツール</h1>
-            <p className="subtitle">トップページから GM 向けと PL 向けの導線を分け、作成・管理・早引きを整理します。</p>
           </div>
           <div className="workspace-actions">
             <button className="secondary theme-toggle" type="button" onClick={toggleTheme} aria-pressed={theme === "dark"}>
@@ -132,118 +130,99 @@ export function CharacterWorkspace() {
       {viewMode === "top" ? (
         <TopPage
           recentSheets={recentSheets}
-          onOpenGm={() => navigateTo("gm-home")}
-          onOpenPl={() => navigateTo("pl-home")}
-          onOpenCharacterReference={() => navigateTo("character-reference")}
+          onStartCreate={onCreateNew}
+          onOpenGuide={() => navigateTo("guide")}
+          onOpenCharacterArchive={openCharacterArchive}
+          onOpenSession={() => navigateTo("session")}
+          onOpenTableAdjustment={() => navigateTo("table-adjustment")}
           onOpenQuickReference={() => navigateTo("quick-reference")}
         />
       ) : null}
 
-      {viewMode === "gm-home" ? (
-        <RoleHome
-          title="GM向け"
-          subtitle="セッション準備、キャラクター管理、各種データ参照へ素早く移動します。"
-          accentClassName="gm-accent"
-          menuItems={[
-            {
-              title: "キャラクターシート管理",
-              description: "保存済みキャラクターの確認、再編集、状態更新、CSV/XLSX 出力を行います。今後はこの画面から、このツールで出力した CSV/XLSX のインポートも追加します。",
-              actionLabel: "管理画面を開く",
-              onAction: openManage
-            },
-            {
-              title: "セッション管理",
-              description: "セッションごとに参加キャラクターを束ね、進行中の状態変動やメモを扱うための基盤です。",
-              actionLabel: "セッション管理を見る",
-              onAction: () => navigateTo("session")
-            }
-          ]}
-          recentSheets={recentSheets}
-        />
-      ) : null}
-
-      {viewMode === "pl-home" ? (
-        <RoleHome
-          title="PL向け"
-          subtitle="キャラクター作成、早引き、初心者ガイドに迷わず進める構成です。"
-          accentClassName="pl-accent"
-          menuItems={[
-            {
-              title: "キャラクターシート作成",
-              description: "既存の作成ウィザードをここに配置します。新規作成と再編集の両方を扱えます。",
-              actionLabel: "作成を始める",
-              onAction: onCreateNew
-            },
-            {
-              title: "初心者向けガイド",
-              description: "CoC の基本、ポイント配分、SAN の考え方などをアプリ内で確認できます。",
-              actionLabel: "ガイドを見る",
-              onAction: () => navigateTo("guide")
-            }
-          ]}
-          recentSheets={recentSheets}
-        />
-      ) : null}
-
       {viewMode === "create" ? (
-        <CharacterWizard draftSheet={editingSheet} onSaved={onSaved} resetToken={resetToken} />
+        <CharacterWizard
+          draftSheet={editingSheet}
+          onSaved={onSaved}
+          onOpenCharacterArchive={openCharacterArchive}
+          resetToken={resetToken}
+        />
       ) : null}
 
-      {viewMode === "manage" ? (
-        <CharacterManager refreshToken={refreshToken} onEdit={onEdit} onSheetsChanged={refreshSheets} />
+      {viewMode === "character-archive" ? (
+        <CharacterArchivePanel sheets={savedSheets} refreshToken={refreshToken} onEdit={onEdit} onSheetsChanged={refreshSheets} />
       ) : null}
-
-      {viewMode === "character-reference" ? <CharacterReferencePanel sheets={savedSheets} /> : null}
 
       {viewMode === "quick-reference" ? <QuickReferencePanel /> : null}
       {viewMode === "guide" ? <GuidePanel onStartCreate={onCreateNew} /> : null}
-      {viewMode === "session" ? <SessionManager availableSheets={savedSheets} onOpenManage={openManage} /> : null}
+      {viewMode === "session" ? <SessionManager availableSheets={savedSheets} onOpenArchive={openCharacterArchive} /> : null}
+      {viewMode === "table-adjustment" ? <TableAdjustmentPanel /> : null}
     </main>
   );
 }
 
 type TopPageProps = {
   recentSheets: CharacterSheet[];
-  onOpenGm: () => void;
-  onOpenPl: () => void;
-  onOpenCharacterReference: () => void;
+  onStartCreate: () => void;
+  onOpenGuide: () => void;
+  onOpenCharacterArchive: () => void;
+  onOpenSession: () => void;
+  onOpenTableAdjustment: () => void;
   onOpenQuickReference: () => void;
 };
 
-function TopPage({ recentSheets, onOpenGm, onOpenPl, onOpenCharacterReference, onOpenQuickReference }: TopPageProps) {
+function TopPage({
+  recentSheets,
+  onStartCreate,
+  onOpenGuide,
+  onOpenCharacterArchive,
+  onOpenSession,
+  onOpenTableAdjustment,
+  onOpenQuickReference
+}: TopPageProps) {
   return (
     <section className="top-hero card">
       <div className="hero-copy">
         <div className="hero-badge">Call of Cthulhu 7th Edition</div>
-        <p className="subtitle">GM は進行と管理、PL は作成と学習を主導線にし、どちらも同じキャラクターデータを使い回せる構成です。</p>
+        <h2 className="hero-title">CoC7 支援ツール</h2>
+        <p className="subtitle">トップで用途を見比べながら、そのまま目的の機能へ進めます。GM / PL 共通で使う保管庫や早引き画面もここから開けます。</p>
       </div>
 
       <div className="role-grid">
         <article className="role-card gm-accent">
           <p className="role-tag">GM向け</p>
-          <h3>セッション運用を中心に使う</h3>
-          <p>キャラクターシート管理とセッション管理へ進みます。</p>
-          <button className="primary" type="button" onClick={onOpenGm}>
-            GM向けを開く
-          </button>
+          <h3>保管と進行をすぐ始める</h3>
+          <p>セッション単位の参加管理に加えて、今後まとめる卓の調整機能へ進めます。</p>
+          <div className="role-card-actions">
+            <button className="primary" type="button" onClick={onOpenSession}>
+              セッション管理
+            </button>
+            <button className="secondary" type="button" onClick={onOpenTableAdjustment}>
+              卓の調整
+            </button>
+          </div>
         </article>
 
         <article className="role-card pl-accent">
           <p className="role-tag">PL向け</p>
-          <h3>キャラ作成と参照を中心に使う</h3>
-          <p>キャラクターシート作成と初心者向けガイドへ進みます。</p>
-          <button className="primary" type="button" onClick={onOpenPl}>
-            PL向けを開く
-          </button>
+          <h3>作成と学習をそのまま始める</h3>
+          <p>キャラクター作成ウィザードと初心者向けガイドを並べて使える導線にしています。</p>
+          <div className="role-card-actions">
+            <button className="primary" type="button" onClick={onStartCreate}>
+              キャラクター作成
+            </button>
+            <button className="secondary" type="button" onClick={onOpenGuide}>
+              初心者ガイド
+            </button>
+          </div>
         </article>
       </div>
 
       <div className="menu-grid">
         <article className="menu-card">
-          <h3>キャラクター参照</h3>
-          <p>保存済みキャラクターの能力値、派生値、配分済み技能を GM / PL 共通で読み取り専用確認できます。</p>
-          <button className="primary" type="button" onClick={onOpenCharacterReference}>
-            参照画面を開く
+          <h3>キャラクター保管庫</h3>
+          <p>保存済みキャラクターの詳細確認、CSV/XLSX 出力、状態管理、バックストーリー更新をまとめて行えます。</p>
+          <button className="primary" type="button" onClick={onOpenCharacterArchive}>
+            保管庫を開く
           </button>
         </article>
 
@@ -261,7 +240,7 @@ function TopPage({ recentSheets, onOpenGm, onOpenPl, onOpenCharacterReference, o
           <h3>このアプリでできること</h3>
           <ul className="feature-list">
             <li>CoC7 キャラクターの作成と再編集</li>
-            <li>CSV / XLSX 出力による共有と保管</li>
+            <li>キャラクター保管庫での閲覧、出力、追記</li>
             <li>保存済みキャラクターの HP / MP / SAN 管理</li>
             <li>今後の早引き表、セッション管理への拡張</li>
           </ul>
@@ -284,65 +263,7 @@ function TopPage({ recentSheets, onOpenGm, onOpenPl, onOpenCharacterReference, o
               {recentSheets.map((sheet) => (
                 <li key={sheet.id}>
                   <strong>{sheet.basicInfo.characterName || "名称未設定"}</strong>
-                  <span>{getProfessionById(sheet.basicInfo.professionId)?.name || "職業未設定"}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-type RoleMenuItem = {
-  title: string;
-  description: string;
-  actionLabel: string;
-  onAction: () => void;
-};
-
-type RoleHomeProps = {
-  title: string;
-  subtitle: string;
-  accentClassName: string;
-  menuItems: RoleMenuItem[];
-  recentSheets: CharacterSheet[];
-};
-
-function RoleHome({ title, subtitle, accentClassName, menuItems, recentSheets }: RoleHomeProps) {
-  return (
-    <section className="card role-home">
-      <div className={`role-home-header ${accentClassName}`}>
-        <div>
-          <h2>{title}</h2>
-          <p>{subtitle}</p>
-        </div>
-      </div>
-
-      <div className="menu-grid">
-        {menuItems.map((item) => (
-          <article key={item.title} className="menu-card">
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-            <button className="primary" type="button" onClick={item.onAction}>
-              {item.actionLabel}
-            </button>
-          </article>
-        ))}
-      </div>
-
-      <div className="info-grid compact">
-        <div className="info-panel">
-          <h3>最近使ったキャラクター</h3>
-          {recentSheets.length === 0 ? (
-            <p className="helper-text">保存済みキャラクターはまだありません。</p>
-          ) : (
-            <ul className="recent-list">
-              {recentSheets.map((sheet) => (
-                <li key={sheet.id}>
-                  <strong>{sheet.basicInfo.characterName || "名称未設定"}</strong>
-                  <span>{sheet.basicInfo.playerName || "プレイヤー名未設定"}</span>
+                  <span>{getDisplayedProfessionName(sheet.basicInfo) || "職業未設定"}</span>
                 </li>
               ))}
             </ul>
@@ -461,6 +382,32 @@ function GuidePanel({ onStartCreate }: { onStartCreate: () => void }) {
         <button className="primary" type="button" onClick={onStartCreate}>
           キャラクター作成へ進む
         </button>
+      </div>
+    </section>
+  );
+}
+
+function TableAdjustmentPanel() {
+  return (
+    <section className="card placeholder-card guide-panel-shell">
+      <div className="guide-hero">
+        <div className="guide-hero-copy">
+          <p className="guide-kicker">Coming Soon</p>
+          <h2 className="title">卓の調整</h2>
+          <p className="subtitle">この画面は仮配置です。要件整理後に、卓運用で使う調整機能をここへまとめます。</p>
+        </div>
+      </div>
+
+      <div className="info-panel guide-info-panel">
+        <div className="guide-section-head">
+          <span className="guide-chip">仮画面</span>
+          <h3>これから整理する内容</h3>
+        </div>
+        <ul className="feature-list guide-feature-list">
+          <li>卓運用で必要な調整項目の洗い出し</li>
+          <li>GM 向け導線としての配置検討</li>
+          <li>セッション管理や保管庫との役割分担</li>
+        </ul>
       </div>
     </section>
   );

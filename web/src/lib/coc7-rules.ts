@@ -1,4 +1,13 @@
-import { AssignedSkill, Characteristics, DerivedStats, Skill } from "@/types/character";
+import { AssignedSkill, Characteristics, DerivedStats, Profession, Skill } from "@/types/character";
+
+export type OccupationPointCalculation = {
+  total: number;
+  selectedFormula: string;
+  evaluatedOptions: Array<{
+    formula: string;
+    total: number;
+  }>;
+};
 
 export type AgeAdjustmentGuide = {
   title: string;
@@ -169,4 +178,36 @@ export function getAgeAdjustmentGuide(age: number): AgeAdjustmentGuide | null {
     ],
     caution: "年齢補正の自動処理は行わず、補助表示のみ行っています。"
   };
+}
+
+export function calculateOccupationPointCalculation(profession: Profession, characteristics: Characteristics): OccupationPointCalculation {
+  const pointOptions = profession.occupationalPointOptions?.length
+    ? profession.occupationalPointOptions
+    : [{ formula: profession.occupationalPointsFormula, terms: profession.occupationalPointTerms }];
+
+  const evaluatedOptions = pointOptions.map((option) => ({
+    formula: option.formula,
+    total: option.terms.reduce(
+      (sum, term) => sum + characteristics[term.key] * term.multiplier,
+      0
+    )
+  }));
+
+  const selectedOption = evaluatedOptions.reduce((best, current) => (
+    current.total > best.total ? current : best
+  ));
+
+  return {
+    total: selectedOption.total,
+    selectedFormula: selectedOption.formula,
+    evaluatedOptions
+  };
+}
+
+export function calculateOccupationPoints(profession: Profession, characteristics: Characteristics): number {
+  return calculateOccupationPointCalculation(profession, characteristics).total;
+}
+
+export function calculateHobbyPoints(characteristics: Characteristics): number {
+  return characteristics.int * 2;
 }

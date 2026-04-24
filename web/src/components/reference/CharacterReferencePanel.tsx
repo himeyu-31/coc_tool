@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { getProfessionById } from "@/lib/professions";
+import { getDisplayedProfessionName, getProfessionById } from "@/lib/professions";
+import { backstoryFieldDefinitions, normalizeCharacterBackstory } from "@/lib/character-sheet";
 import { CharacterSheet, CharacteristicKey, SkillCategory } from "@/types/character";
 
 const characteristicLabels: Record<CharacteristicKey, string> = {
@@ -104,7 +105,7 @@ export function CharacterReferencePanel({ sheets }: CharacterReferencePanelProps
                 >
                   <div className="reference-row-main">
                     <strong>{sheet.basicInfo.characterName || "名称未設定"}</strong>
-                    <span>{getProfessionById(sheet.basicInfo.professionId)?.name || "職業未設定"}</span>
+                    <span>{getDisplayedProfessionName(sheet.basicInfo) || "職業未設定"}</span>
                   </div>
                   <div className="reference-row-meta">
                     <span>{sheet.basicInfo.playerName || "プレイヤー名未設定"}</span>
@@ -120,7 +121,7 @@ export function CharacterReferencePanel({ sheets }: CharacterReferencePanelProps
               <article className="reference-detail-card character-reference-card">
                 <div className="reference-card-header">
                   <h3>{selectedSheet.basicInfo.characterName || "名称未設定"}</h3>
-                  <span className="pill">{getProfessionById(selectedSheet.basicInfo.professionId)?.name || "職業未設定"}</span>
+                  <span className="pill">{getDisplayedProfessionName(selectedSheet.basicInfo) || "職業未設定"}</span>
                 </div>
 
                 <div className="reference-two-column character-reference-grid">
@@ -130,6 +131,7 @@ export function CharacterReferencePanel({ sheets }: CharacterReferencePanelProps
                       <div className="skill-row"><span>プレイヤー名</span><strong>{selectedSheet.basicInfo.playerName || "-"}</strong></div>
                       <div className="skill-row"><span>年齢</span><strong>{selectedSheet.basicInfo.age || "-"}</strong></div>
                       <div className="skill-row"><span>性別・性自認</span><strong>{selectedSheet.basicInfo.gender || "-"}</strong></div>
+                      {selectedSheet.basicInfo.professionMode === "custom" ? <div className="skill-row"><span>ルール参照元</span><strong>{getProfessionById(selectedSheet.basicInfo.professionId)?.name || "-"}</strong></div> : null}
                       <div className="skill-row"><span>時代設定</span><strong>{selectedSheet.basicInfo.era || "-"}</strong></div>
                     </div>
                   </div>
@@ -155,6 +157,21 @@ export function CharacterReferencePanel({ sheets }: CharacterReferencePanelProps
                         <strong>{value}</strong>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                <div className="reference-section">
+                  <strong>バックストーリー</strong>
+                  <div className="reference-backstory-grid">
+                    {backstoryFieldDefinitions.map((field) => {
+                      const value = normalizeCharacterBackstory(selectedSheet.backstory)[field.key];
+                      return (
+                        <div key={field.key} className="reference-backstory-item">
+                          <span>{field.label}</span>
+                          <p>{value || "-"}</p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 

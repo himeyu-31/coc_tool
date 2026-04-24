@@ -1,3 +1,4 @@
+import { normalizeCharacterSheet } from "@/lib/character-sheet";
 import { CharacterSheet } from "@/types/character";
 
 const STORAGE_KEY = "coc7-character-sheets";
@@ -27,7 +28,7 @@ export function getCharacterSheets(): CharacterSheet[] {
   }
 
   try {
-    return JSON.parse(rawValue) as CharacterSheet[];
+    return (JSON.parse(rawValue) as CharacterSheet[]).map(normalizeCharacterSheet);
   } catch {
     return [];
   }

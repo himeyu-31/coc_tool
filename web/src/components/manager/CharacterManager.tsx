@@ -3,7 +3,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { importCharacterSheetFromFile } from "@/lib/character-import";
 import { exportCharacterSheetAsCsv, exportCharacterSheetAsXlsx } from "@/lib/character-export";
-import { getProfessionById } from "@/lib/professions";
+import { getDisplayedProfessionName } from "@/lib/professions";
 import { deleteCharacterSheet, getCharacterSheets, saveCharacterSheet, updateCharacterSheet } from "@/lib/character-storage";
 import { CharacterSheet } from "@/types/character";
 
@@ -145,7 +145,7 @@ export function CharacterManager({ refreshToken, onEdit, onSheetsChanged }: Char
                     {sheet.basicInfo.playerName || "プレイヤー名未設定"} / {sheet.basicInfo.age || "年齢未設定"}
                   </div>
                 </div>
-                <div className="pill">{getProfessionById(sheet.basicInfo.professionId)?.name || "職業未設定"}</div>
+                <div className="pill">{getDisplayedProfessionName(sheet.basicInfo) || "職業未設定"}</div>
               </div>
 
               <div className="derived-list">

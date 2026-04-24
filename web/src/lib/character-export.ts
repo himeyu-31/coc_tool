@@ -1,5 +1,6 @@
 import { CharacterSheet } from "@/types/character";
 import { CHARACTER_TRANSFER_FORMAT, CHARACTER_TRANSFER_ROW_LABEL, encodeCharacterSheetTransferData } from "@/lib/character-transfer";
+import { getDisplayedProfessionName } from "@/lib/professions";
 
 export function exportCharacterSheetAsCsv(sheet: CharacterSheet): void {
   const rows = buildExportRows(sheet);
@@ -31,7 +32,23 @@ function buildExportRows(sheet: CharacterSheet): string[][] {
     ["年齢", sheet.basicInfo.age, ""],
     ["性別", sheet.basicInfo.gender, ""],
     ["職業ID", sheet.basicInfo.professionId, ""],
+    ["職業入力モード", sheet.basicInfo.professionMode, ""],
+    ["職業表示名", getDisplayedProfessionName(sheet.basicInfo), ""],
     ["時代設定", sheet.basicInfo.era, ""],
+    [],
+    ["バックストーリー", "", ""],
+    ["容姿の描写", sheet.backstory.appearance, ""],
+    ["特徴", sheet.backstory.traits, ""],
+    ["イデオロギー / 信念", sheet.backstory.ideology, ""],
+    ["負傷、傷跡", sheet.backstory.injuries, ""],
+    ["重要な人々", sheet.backstory.significantPeople, ""],
+    ["恐怖症、マニア", sheet.backstory.phobiasAndManias, ""],
+    ["意味のある場所", sheet.backstory.meaningfulLocations, ""],
+    ["魔道書、呪文、アーティファクト", sheet.backstory.tomesAndArtifacts, ""],
+    ["秘蔵の品", sheet.backstory.treasuredPossessions, ""],
+    ["遭遇した超自然の存在", sheet.backstory.strangeEncounters, ""],
+    ["装備と所持品", sheet.backstory.equipmentAndItems, ""],
+    ["収入と財産", sheet.backstory.incomeAndAssets, ""],
     [],
     ["能力値", "", ""],
     ...characteristicRows,

@@ -304,6 +304,7 @@ export function QuickReferencePanel() {
                 <p>{selectedProfession.description}</p>
                 <div className="reference-pill-row">
                   <span className="pill">職業Pt {selectedProfession.occupationalPointsFormula}</span>
+                  {selectedProfession.occupationalPointOptions?.length ? <span className="pill">高い方を自動選択</span> : null}
                   <span className="pill">時代 {selectedProfession.eraTags.join(" / ")}</span>
                 </div>
                 <div className="reference-section">

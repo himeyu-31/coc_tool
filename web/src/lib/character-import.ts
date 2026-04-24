@@ -1,4 +1,5 @@
 import { allSkillList } from "@/lib/coc7-data";
+import { normalizeBasicInfo, normalizeCharacterBackstory } from "@/lib/character-sheet";
 import { calculateDerivedStats } from "@/lib/coc7-rules";
 import { CHARACTER_TRANSFER_FORMAT, CHARACTER_TRANSFER_ROW_LABEL, decodeCharacterSheetTransferData } from "@/lib/character-transfer";
 import { AssignedSkill, CharacterSheet, CharacteristicKey, Characteristics, DerivedStats, Skill, SkillCategory } from "@/types/character";
@@ -64,16 +65,20 @@ function normalizeImportedCharacterSheet(rawSheet: CharacterSheet, fileName: str
 
   return {
     id: typeof rawSheet?.id === "string" && rawSheet.id ? rawSheet.id : buildImportedSheetId(fileName),
-    basicInfo: {
+    basicInfo: normalizeBasicInfo({
       characterName: toStringValue(rawSheet?.basicInfo?.characterName),
       playerName: toStringValue(rawSheet?.basicInfo?.playerName),
       age: toStringValue(rawSheet?.basicInfo?.age),
       gender: toStringValue(rawSheet?.basicInfo?.gender),
       professionId: toStringValue(rawSheet?.basicInfo?.professionId),
+      professionMode: rawSheet?.basicInfo?.professionMode,
+      professionName: toStringValue(rawSheet?.basicInfo?.professionName),
       era: toStringValue(rawSheet?.basicInfo?.era)
-    },
+    }),
+    backstory: normalizeCharacterBackstory(rawSheet?.backstory),
     characteristics,
     derivedStats,
+    occupationSkillSelections: isOccupationSkillSelectionMap(rawSheet?.occupationSkillSelections) ? rawSheet.occupationSkillSelections : undefined,
     occupationSkills: normalizeAssignedSkillList(rawSheet?.occupationSkills),
     optionalSkills: normalizeAssignedSkillList(rawSheet?.optionalSkills),
     weapons: Array.isArray(rawSheet?.weapons) ? rawSheet.weapons : [],
@@ -118,16 +123,33 @@ function importLegacyCharacterSheet(rows: string[][], fileName: string): Charact
 
   return {
     id: buildImportedSheetId(fileName),
-    basicInfo: {
+    basicInfo: normalizeBasicInfo({
       characterName: valueMap.get("キャラクター名") ?? stripExtension(fileName),
       playerName: valueMap.get("プレイヤー名") ?? "",
       age: valueMap.get("年齢") ?? "",
       gender: valueMap.get("性別") ?? "",
       professionId: valueMap.get("職業ID") ?? "",
+      professionMode: valueMap.get("職業入力モード") === "custom" ? "custom" : "preset",
+      professionName: valueMap.get("職業表示名") ?? "",
       era: valueMap.get("時代設定") ?? ""
-    },
+    }),
+    backstory: normalizeCharacterBackstory({
+      appearance: valueMap.get("容姿の描写") ?? "",
+      traits: valueMap.get("特徴") ?? "",
+      ideology: valueMap.get("イデオロギー / 信念") ?? "",
+      injuries: valueMap.get("負傷、傷跡") ?? "",
+      significantPeople: valueMap.get("重要な人々") ?? "",
+      phobiasAndManias: valueMap.get("恐怖症、マニア") ?? "",
+      meaningfulLocations: valueMap.get("意味のある場所") ?? "",
+      tomesAndArtifacts: valueMap.get("魔道書、呪文、アーティファクト") ?? "",
+      treasuredPossessions: valueMap.get("秘蔵の品") ?? "",
+      strangeEncounters: valueMap.get("遭遇した超自然の存在") ?? "",
+      equipmentAndItems: valueMap.get("装備と所持品") ?? "",
+      incomeAndAssets: valueMap.get("収入と財産") ?? ""
+    }),
     characteristics,
     derivedStats,
+    occupationSkillSelections: undefined,
     occupationSkills: importedSkills.occupationSkills,
     optionalSkills: importedSkills.optionalSkills,
     weapons: [],
@@ -191,6 +213,14 @@ function normalizeAssignedSkillList(skills: CharacterSheet["occupationSkills"] |
     const assignedValue = Math.max(0, toNumber(skill.assigned));
     return buildAssignedSkill(template, assignedValue);
   });
+}
+
+function isOccupationSkillSelectionMap(value: unknown): value is Record<string, string[]> {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  return Object.values(value).every((entry) => Array.isArray(entry) && entry.every((item) => typeof item === "string"));
 }
 
 function resolveSkillTemplate(skill: Partial<Skill> & { base?: number; max?: number; name?: string; id?: string }): Skill {
